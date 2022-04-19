@@ -1,6 +1,5 @@
 ﻿package models;
 
-import enums.CatColor;
 import enums.CatType;
 import lombok.Value;
 
