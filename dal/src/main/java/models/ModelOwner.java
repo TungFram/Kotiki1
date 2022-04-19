@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,9 +39,9 @@ public class ModelOwner {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "affiliation",
             joinColumns = @JoinColumn(name = "id_of_owner", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_of_cat", referencedColumnName = "id"))
-    List<ModelCat> cats;
+    @Singular List<ModelCat> cats = new ArrayList<>();
 }

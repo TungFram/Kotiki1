@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.*;
 
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -35,23 +34,28 @@ public class ModelCat {
     
     @Column(name = "date_birth")
     @Builder.Default LocalDate dateOfBirth = LocalDate.now();
-    
-    @Column(name = "id_of_type")
-    int idOfType;
-    
-    @Column(name = "id_of_color")
-    int idOfColor;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_of_type", unique = true, nullable = false)
+    ModelCatType type;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "id_of_color", unique = true, nullable = false)
+    ModelCatColor color;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "cats")
-    @Builder.Default List<ModelOwner> owners = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "affiliation",
+            joinColumns = @JoinColumn(name = "id_of_cat", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id_of_owner", referencedColumnName = "id"))
+    ModelOwner owner;
     
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "friendship",
             joinColumns = @JoinColumn(name = "id_of_first_cat", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_of_second_cat", referencedColumnName = "id")) //todo: Можно ли так делать
-    @Builder.Default List<ModelCat> fiends = new ArrayList<>();
+            inverseJoinColumns = @JoinColumn(name = "id_of_second_cat", referencedColumnName = "id"))
+    @Singular List<ModelCat> fiends = new ArrayList<>();
 }
