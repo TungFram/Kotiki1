@@ -1,12 +1,12 @@
-﻿package models;
+package models;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
 
+import jakarta.persistence.*;
 import lombok.*;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -15,12 +15,12 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder(builderClassName = "CatBuilder",
         builderMethodName = "createBuilder",
         toBuilder = true,
-        access = AccessLevel.PRIVATE,
+        access = AccessLevel.PUBLIC,
         setterPrefix = "with")
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "cat")
-public class ModelCat {
+public class ModelCat { сделать дефолтный конструктор
     
     @Id
     @SequenceGenerator(name = "pet_seq_gen", sequenceName = "pet_sequence", initialValue = 1, allocationSize = 1)

@@ -1,10 +1,9 @@
-﻿package models;
+package models;
 
 import enums.CatType;
 import lombok.Value;
 
-import javax.persistence.*;
-
+import jakarta.persistence.*;
 
 @Entity
 @Value
@@ -12,11 +11,15 @@ import javax.persistence.*;
 public class ModelCatType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     int id;
 
     @Column(name = "type", length = 32, unique = true, nullable = true)
     @Enumerated(EnumType.STRING)
-    CatType color;
+    CatType type;
+
+    public ModelCatType(CatType type) {
+        this.type = type;
+        this.id = type.ordinal();
+    }
 }

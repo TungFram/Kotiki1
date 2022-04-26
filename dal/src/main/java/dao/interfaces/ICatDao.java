@@ -1,4 +1,4 @@
-﻿package dao.interfaces;
+package dao.interfaces;
 
 import java.io.Serializable;
 import java.util.List;

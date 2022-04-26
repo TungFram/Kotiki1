@@ -1,21 +1,20 @@
-﻿package models;
+package models;
 
-import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
+import lombok.*;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Value
 @Builder(builderClassName = "OwnerBuilder",
         builderMethodName = "createBuilder",
         toBuilder = true,
-        access = AccessLevel.PRIVATE,
+        access = AccessLevel.PUBLIC,
         setterPrefix = "with")
 @DynamicInsert
 @DynamicUpdate
@@ -43,9 +42,6 @@ public class ModelOwner {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinTable(name = "affiliation",
-            joinColumns = @JoinColumn(name = "id_of_owner", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_of_cat", referencedColumnName = "id"))
     @Singular
     List<ModelCat> cats;
 
