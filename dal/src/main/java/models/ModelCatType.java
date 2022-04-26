@@ -16,7 +16,7 @@ public class ModelCatType {
     @Column(name = "id", nullable = false)
     int id;
 
-    @Column(name = "type", unique = true, nullable = true)
+    @Column(name = "type", length = 32, unique = true, nullable = true)
     @Enumerated(EnumType.STRING)
     CatType color;
 }

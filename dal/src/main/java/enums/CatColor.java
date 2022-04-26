@@ -37,4 +37,14 @@ public enum CatColor {
     AMBER_TORTIE,
     SORREL_TORTIE,
     UNREGISTERED;
+    
+    @Override
+    public String toString()
+    {
+        String res = super.toString();
+        if (super.toString().contains("_")) {
+            res = res.replace('_', '-');
+        }
+        return res;
+    }
 }

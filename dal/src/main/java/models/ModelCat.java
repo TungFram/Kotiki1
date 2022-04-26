@@ -29,7 +29,7 @@ public class ModelCat {
     int id;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "name")
+    @Column(name = "name", length = 64)
     String name;
     
     @Column(name = "date_birth")
@@ -57,5 +57,5 @@ public class ModelCat {
     @JoinTable(name = "friendship",
             joinColumns = @JoinColumn(name = "id_of_first_cat", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_of_second_cat", referencedColumnName = "id"))
-    @Singular List<ModelCat> fiends = new ArrayList<>();
+    @Singular List<ModelCat> fiends;
 }

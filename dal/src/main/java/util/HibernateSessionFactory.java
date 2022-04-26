@@ -30,7 +30,7 @@ public class HibernateSessionFactory {
                 _instance = configuration.buildSessionFactory(builder.build());
 
             } catch (Exception e) {
-                System.out.println("Exception with session factory:\n" + e);
+                System.out.println("Initial session factory failed:\n" + e);
             }
         }
         return _instance;

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Value
@@ -27,21 +28,25 @@ public class ModelOwner {
     @Column(name = "id", nullable = false)
     int id;
     
-    @Column(name = "name")
+    @Column(name = "name", length = 32)
     String name;
     
-    @Column(name = "surname")
+    @Column(name = "surname", length = 32)
     String surname;
     
-    @Column(name = "DateOfBirth")
-    LocalDate DateOfBirth;
+    @Column(name = "date_birth")
+    LocalDate dateOfBirth;
 
+    @Column(name = "mail", length = 64)
+    String mail;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinTable(name = "affiliation",
             joinColumns = @JoinColumn(name = "id_of_owner", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_of_cat", referencedColumnName = "id"))
-    @Singular List<ModelCat> cats = new ArrayList<>();
+    @Singular
+    List<ModelCat> cats;
+
 }
