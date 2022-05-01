@@ -10,17 +10,19 @@ import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-@Entity
 @Value
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
 @Builder(builderClassName = "CatBuilder",
         builderMethodName = "createBuilder",
         toBuilder = true,
         access = AccessLevel.PUBLIC,
         setterPrefix = "with")
+@Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "cat")
-public class ModelCat { сделать дефолтный конструктор
+public class ModelCat { //сделать дефолтный конструктор
     
     @Id
     @SequenceGenerator(name = "pet_seq_gen", sequenceName = "pet_sequence", initialValue = 1, allocationSize = 1)
@@ -50,6 +52,8 @@ public class ModelCat { сделать дефолтный конструктор
             joinColumns = @JoinColumn(name = "id_of_cat", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_of_owner", referencedColumnName = "id"))
     ModelOwner owner;
+    
+    
     
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

@@ -1,12 +1,14 @@
 package models;
 
 import enums.CatType;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import jakarta.persistence.*;
 
 @Entity
 @Value
+@NoArgsConstructor(force = true)
 @Table(name = "cat_type")
 public class ModelCatType {
 

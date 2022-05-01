@@ -16,14 +16,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@RunWith(MockitoJUnitRunner.class)
 class CatDaoTest {
 
     private static ModelCat biba;
     private static ModelCat boba;
+    
+    private static CatDao catDao;
     
     @BeforeAll
     static void setUp() {        
@@ -40,13 +45,15 @@ class CatDaoTest {
                 .withColor(new ModelCatColor(CatColor.WHITE))
                 .withType(new ModelCatType(CatType.SYS))
                 .build();
+
+        catDao = new CatDao();
     }
     
 
     @Test
-    void persist() {
-        CatDao catDao = new CatDao();
+    void persist1Cat_DBShouldContain1Cat() {
         catDao.deleteAll();
+        //biba was created in setUp()
         
         catDao.persist(biba);
 
@@ -56,6 +63,12 @@ class CatDaoTest {
 
     @Test
     void update() {
+        catDao.deleteAll();
+
+        catDao.persist(biba);
+
+        List<ModelCat> currentCats = catDao.findAll();
+        Assertions.assertEquals(1, currentCats.size());
     }
 
     @Test

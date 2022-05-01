@@ -1,12 +1,14 @@
 package models;
 
 import enums.CatColor;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import jakarta.persistence.*;
 
 @Entity
 @Value
+@NoArgsConstructor(force = true)
 @Table(name = "cat_color")
 public class ModelCatColor {
     

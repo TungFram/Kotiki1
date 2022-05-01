@@ -9,13 +9,15 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
 @Value
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
 @Builder(builderClassName = "OwnerBuilder",
         builderMethodName = "createBuilder",
         toBuilder = true,
         access = AccessLevel.PUBLIC,
         setterPrefix = "with")
+@Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "owner")
