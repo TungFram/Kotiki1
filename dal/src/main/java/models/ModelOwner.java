@@ -10,8 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Value
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @Builder(builderClassName = "OwnerBuilder",
         builderMethodName = "createBuilder",
         toBuilder = true,
@@ -20,25 +20,25 @@ import java.util.List;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "owner")
+@Table(name = "Owner")
 public class ModelOwner {
 
     @Id
     @SequenceGenerator(name = "owner_seq_gen", sequenceName = "own_sequence", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "owner_seq_gen")
-    @Column(name = "id", nullable = false)
+    @Column(name = "OwnerID", nullable = false)
     int id;
     
-    @Column(name = "name", length = 32)
+    @Column(name = "Name", length = 32)
     String name;
     
-    @Column(name = "surname", length = 32)
+    @Column(name = "Surname", length = 32)
     String surname;
     
-    @Column(name = "date_birth")
+    @Column(name = "Date_birth")
     LocalDate dateOfBirth;
 
-    @Column(name = "mail", length = 64)
+    @Column(name = "Mail", length = 64)
     String mail;
 
     @ToString.Exclude

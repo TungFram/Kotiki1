@@ -82,4 +82,5 @@ public enum CatType {
     THA,
     TON,
     NON,
-    UNREGISTERED}
+    UNREGISTERED
+}

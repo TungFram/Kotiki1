@@ -9,14 +9,14 @@ import jakarta.persistence.*;
 @Entity
 @Value
 @NoArgsConstructor(force = true)
-@Table(name = "cat_color")
+@Table(name = "Cat_color")
 public class ModelCatColor {
     
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "ColorID", nullable = false)
     int id;
 
-    @Column(name = "color", length = 32, unique = true, nullable = true)
+    @Column(name = "Color", length = 32, unique = true, nullable = true)
     @Enumerated(EnumType.STRING)
     CatColor color;
     

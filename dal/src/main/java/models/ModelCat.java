@@ -11,8 +11,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Value
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @Builder(builderClassName = "CatBuilder",
         builderMethodName = "createBuilder",
         toBuilder = true,
@@ -21,36 +21,37 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "cat")
+@Table(name = "Cat")
 public class ModelCat { //сделать дефолтный конструктор
     
     @Id
     @SequenceGenerator(name = "pet_seq_gen", sequenceName = "pet_sequence", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pet_seq_gen")
-    @Column(name = "id", nullable = false)
+    @Column(name = "CatID", nullable = false)
     int id;
 
     @EqualsAndHashCode.Exclude
-    @Column(name = "name", length = 64)
+    @Column(name = "Name", length = 64)
     String name;
     
-    @Column(name = "date_birth")
+    @Column(name = "Date_birth")
     @Builder.Default LocalDate dateOfBirth = LocalDate.now();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_of_type", unique = true, nullable = false)
+    @JoinColumn(name = "Id_of_type", unique = true, nullable = false)
     ModelCatType type;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_of_color", unique = true, nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "Cat_color",
+            inverseJoinColumns = @JoinColumn(name = "Id_of_color", referencedColumnName = "ColorID"))
     ModelCatColor color;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "affiliation",
-            joinColumns = @JoinColumn(name = "id_of_cat", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_of_owner", referencedColumnName = "id"))
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "Affiliation",
+            joinColumns = @JoinColumn(name = "Id_of_cat", referencedColumnName = "CatID"),
+            inverseJoinColumns = @JoinColumn(name = "Id_of_owner", referencedColumnName = "OwnerID"))
     ModelOwner owner;
     
     
@@ -58,8 +59,8 @@ public class ModelCat { //сделать дефолтный конструкто
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "friendship",
-            joinColumns = @JoinColumn(name = "id_of_first_cat", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_of_second_cat", referencedColumnName = "id"))
+    @JoinTable(name = "Friendship",
+            joinColumns = @JoinColumn(name = "id_of_first_cat", referencedColumnName = "CatID"),
+            inverseJoinColumns = @JoinColumn(name = "id_of_second_cat", referencedColumnName = "CatID"))
     @Singular List<ModelCat> fiends;
 }

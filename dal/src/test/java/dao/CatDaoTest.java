@@ -17,7 +17,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -65,10 +68,18 @@ class CatDaoTest {
     void update() {
         catDao.deleteAll();
 
-        catDao.persist(biba);
+        ModelCat clone = biba.toBuilder().build();
+        catDao.persist(clone);
+        //TODO: сделать енамы как человеческие строки в таблицах, нахрен надо так париться. А в сущностях просто енамы, а не OneToOne
+        ModelCat bibaBefore = catDao.persist(biba);
+        biba = bibaBefore.toBuilder().withName("Ben, ohoho no").withType(new ModelCatType(CatType.BEN)).build();
+        ModelCat bibaAfter = catDao.update(biba);
+        
+        Assertions.assertEquals("Ben, ohoho no", bibaAfter.getName());
+        Assertions.assertEquals(CatType.BEN.toString(), bibaAfter.getType().getType().toString());
 
-        List<ModelCat> currentCats = catDao.findAll();
-        Assertions.assertEquals(1, currentCats.size());
+        Assertions.assertNotEquals(bibaBefore.getName(), bibaAfter.getName());
+        Assertions.assertNotEquals(bibaBefore.getType().getType().toString(), bibaAfter.getType().getType().toString());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package dao;
 
 import dao.interfaces.IOwnerDao;
+import models.ModelCat;
 import models.ModelOwner;
 
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.List;
 public class OwnerDao implements IOwnerDao<ModelOwner, Integer> {
 
     @Override
-    public void persist(ModelOwner entity) {
+    public ModelOwner persist(ModelOwner entity) {
         Session session = this.getSession();
         Transaction transaction = this.getTransaction(session);
         
@@ -30,17 +31,19 @@ public class OwnerDao implements IOwnerDao<ModelOwner, Integer> {
         
         transaction.commit();
         session.close();
+        return entity;
     }
 
     @Override
-    public void update(ModelOwner entity) {
+    public ModelOwner update(ModelOwner entity) {
         Session session = this.getSession();
         Transaction transaction = this.getTransaction(session);
 
-        session.merge(entity);
+        ModelOwner newEntity = session.merge(entity);
 
         transaction.commit();
         session.close();
+        return newEntity;
     }
 
     @Override
@@ -55,13 +58,20 @@ public class OwnerDao implements IOwnerDao<ModelOwner, Integer> {
 
     @Override
     public List<ModelOwner> findAll() {
+        Session session = this.getSession();
+        Transaction transaction = getTransaction(session);
+
         HibernateCriteriaBuilder builder = this.getSession().getCriteriaBuilder();
         JpaCriteriaQuery<ModelOwner> criteriaQuery = builder.createQuery(ModelOwner.class);
         JpaRoot<ModelOwner> rootEntry = criteriaQuery.from(ModelOwner.class);
         JpaCriteriaQuery<ModelOwner> all = criteriaQuery.select(rootEntry);
 
         Query<ModelOwner> allQuery = this.getSession().createQuery(all);
-        return allQuery.getResultList();
+        List<ModelOwner> resultList = allQuery.getResultList();
+
+        transaction.commit();
+        session.close();
+        return resultList;
     }
 
     @Override

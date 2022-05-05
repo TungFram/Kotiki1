@@ -22,7 +22,7 @@ import java.util.List;
 public class CatDao implements ICatDao<ModelCat, Integer> {
 
     @Override
-    public void persist(ModelCat entity) {
+    public ModelCat persist(ModelCat entity) {
         Session session = this.getSession();
         Transaction transaction = this.getTransaction(session);
         
@@ -30,17 +30,19 @@ public class CatDao implements ICatDao<ModelCat, Integer> {
         
         transaction.commit();
         session.close();
+        return entity;
     }
 
     @Override
-    public void update(ModelCat entity) {
+    public ModelCat update(ModelCat entity) {
         Session session = this.getSession();
         Transaction transaction = this.getTransaction(session);
-        
-        session.merge(entity);
+
+        ModelCat newEntity = session.merge(entity);
         
         transaction.commit();
         session.close();
+        return newEntity;
     }
     
     @Override

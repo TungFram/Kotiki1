@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface ICatDao<E, Id extends Serializable> {
     
-    public void persist(E entity);
+    public E persist(E entity);
 
-    public void update(E entity);
+    public E update(E entity);
 
     public E findById(Id id);
     
