@@ -3,24 +3,13 @@ package dao;
 import enums.CatColor;
 import enums.CatType;
 import models.ModelCat;
-import models.ModelCatColor;
-import models.ModelCatType;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,15 +27,15 @@ class CatDaoTest {
         biba = ModelCat.createBuilder()
                 .withName("Bibonskiy")
                 .withDateOfBirth(LocalDate.now())
-                .withColor(new ModelCatColor(CatColor.SMOKE))
-                .withType(new ModelCatType(CatType.RUS))
+                .withColor(CatColor.BLACK)
+                .withType(CatType.RUS)
                 .build();
 
         boba = ModelCat.createBuilder()
                 .withName("Bolkonskiy")
                 .withDateOfBirth(LocalDate.now())
-                .withColor(new ModelCatColor(CatColor.WHITE))
-                .withType(new ModelCatType(CatType.SYS))
+                .withColor(CatColor.WHITE)
+                .withType(CatType.SYS)
                 .build();
 
         catDao = new CatDao();
@@ -65,36 +54,51 @@ class CatDaoTest {
     }
 
     @Test
-    void update() {
+    void updateCat_CatDataChanged() {
         catDao.deleteAll();
 
         ModelCat clone = biba.toBuilder().build();
         catDao.persist(clone);
-        //TODO: сделать енамы как человеческие строки в таблицах, нахрен надо так париться. А в сущностях просто енамы, а не OneToOne
+        
         ModelCat bibaBefore = catDao.persist(biba);
-        biba = bibaBefore.toBuilder().withName("Ben, ohoho no").withType(new ModelCatType(CatType.BEN)).build();
+        biba = bibaBefore.toBuilder().withName("Ben, ohoho, no").withType(CatType.BEN).withColor(CatColor.EBONY).build();
         ModelCat bibaAfter = catDao.update(biba);
         
-        Assertions.assertEquals("Ben, ohoho no", bibaAfter.getName());
-        Assertions.assertEquals(CatType.BEN.toString(), bibaAfter.getType().getType().toString());
+        Assertions.assertEquals("Ben, ohoho, no", bibaAfter.getName());
+        Assertions.assertEquals(CatType.BEN.toString(), bibaAfter.getType().toString());
+        Assertions.assertEquals(CatColor.EBONY.toString(), bibaAfter.getColor().toString());
 
         Assertions.assertNotEquals(bibaBefore.getName(), bibaAfter.getName());
-        Assertions.assertNotEquals(bibaBefore.getType().getType().toString(), bibaAfter.getType().getType().toString());
+        Assertions.assertNotEquals(bibaBefore.getType().toString(), bibaAfter.getType().toString());
+        Assertions.assertNotEquals(bibaBefore.getColor().toString(), bibaAfter.getColor().toString());
+
     }
 
     @Test
     void findById() {
-    }
+        catDao.deleteAll();
+        
+        ModelCat persistedBiba = catDao.persist(biba);
+        ModelCat foundedBiba = catDao.findById(persistedBiba.getId());
 
-    @Test
-    void findAll() {
+        Assertions.assertNotNull(foundedBiba);
+        Assertions.assertEquals(persistedBiba.getId(), foundedBiba.getId());
+        Assertions.assertEquals(persistedBiba, foundedBiba);
     }
 
     @Test
     void delete() {
-    }
+        catDao.deleteAll();
 
-    @Test
-    void deleteAll() {
+        ModelCat persistedBiba = catDao.persist(biba);
+        ModelCat persistedBoba = catDao.persist(boba);
+        catDao.delete(biba);
+
+        ModelCat foundedBiba = catDao.findById(persistedBiba.getId());
+
+        Assertions.assertNull(foundedBiba);
+        List<ModelCat> currentCats = catDao.findAll();
+        Assertions.assertEquals(1, currentCats.size());
+        Assertions.assertEquals(currentCats.get(0), persistedBoba);
     }
 }

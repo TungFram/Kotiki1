@@ -49,9 +49,11 @@ public class OwnerDao implements IOwnerDao<ModelOwner, Integer> {
     @Override
     public ModelOwner findById(Integer id) {
         Session session = this.getSession();
+        Transaction transaction = this.getTransaction(session);
 
         ModelOwner model = session.get(ModelOwner.class, id);
 
+        transaction.commit();
         session.close();
         return model;
     }

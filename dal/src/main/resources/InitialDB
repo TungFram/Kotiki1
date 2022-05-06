@@ -1,4 +1,58 @@
-﻿-- create type color_of_cat as enum
+﻿create table Owner
+(
+    OwnerID SERIAL PRIMARY KEY,
+    Name varchar(32) not null,
+    Surname varchar(32),
+    Date_birth date,
+    Mail varchar(64) not null UNIQUE
+);
+
+
+create table Affiliation
+(
+    AffiliationID SERIAL PRIMARY KEY,
+    Id_of_cat int4 not null,
+    Id_of_owner int4 not null,
+    Date_of_creating date not null,
+    FOREIGN KEY (Id_of_cat) REFERENCES Cat (CatID) ON DELETE CASCADE,
+    FOREIGN KEY (Id_of_owner) REFERENCES Owner (OwnerID) ON DELETE CASCADE
+);  
+
+create table Friendship
+(
+    FriendshipID SERIAL PRIMARY KEY,
+    Id_of_first_cat int4 not null,
+    Id_of_second_cat int4 not null,
+    Date_of_creating date not null,
+    FOREIGN KEY (Id_of_first_cat) REFERENCES Cat (CatID) ON DELETE CASCADE,
+    FOREIGN KEY (Id_of_second_cat) REFERENCES Cat (CatID) ON DELETE CASCADE
+);
+
+create table Cat
+(
+    CatID SERIAL PRIMARY KEY,
+    Name varchar(64) not null,
+    Date_birth date not null,
+    Type varchar(32),
+    Color varchar(32) 
+);
+
+create table Cat
+(
+    CatID SERIAL PRIMARY KEY,
+    OwnerID int4,
+    Name varchar(64) not null,
+    Date_birth date not null,
+    Type varchar(32),
+    Color varchar(32),
+    FOREIGN KEY (OwnerID) REFERENCES Cat (OwnerID) ON DELETE set null 
+);
+
+drop table if exists postgres.public.cat cascade;
+
+
+
+-- create type color_of_cat as enum
 --     (
 --         'black',
 --         'seal',
@@ -247,58 +301,3 @@
 --     (81, 'NON'),
 --     (82, 'unregistered');
 
-
-create table Owner
-(
-    OwnerID SERIAL PRIMARY KEY,
-    Name varchar(32) not null,
-    Surname varchar(32),
-    Date_birth date,
-    Mail varchar(64) not null UNIQUE
-);
-
-
-create table Affiliation
-(
-    AffiliationID SERIAL PRIMARY KEY,
-    Id_of_cat int4 not null,
-    Id_of_owner int4 not null,
-    Date_of_creating date not null,
-    FOREIGN KEY (Id_of_cat) REFERENCES Cat (CatID) ON DELETE CASCADE,
-    FOREIGN KEY (Id_of_owner) REFERENCES Owner (OwnerID) ON DELETE CASCADE
-);
-
-create table Friendship
-(
-    FriendshipID SERIAL PRIMARY KEY,
-    Id_of_first_cat int4 not null,
-    Id_of_second_cat int4 not null,
-    Date_of_creating date not null,
-    FOREIGN KEY (Id_of_first_cat) REFERENCES Cat (CatID) ON DELETE CASCADE,
-    FOREIGN KEY (Id_of_second_cat) REFERENCES Cat (CatID) ON DELETE CASCADE
-);
-
-create table Cat
-(
-    CatID SERIAL PRIMARY KEY,
-    Name varchar(64) not null,
-    Date_birth date not null,
-    Id_of_type int4,
-    Id_of_color int4,
-    FOREIGN KEY (Id_of_type) REFERENCES Cat_type (TypeID) ON DELETE SET NULL,
-    FOREIGN KEY (Id_of_color) REFERENCES Cat_color (ColorID) ON DELETE SET NULL
-);
-
-create table Cat_color
-(
-    ColorID int4 PRIMARY KEY,
-    Color varchar(32) UNIQUE
-);
-
-create table Cat_type
-(
-    TypeID int4 PRIMARY KEY,
-    Type varchar(32) UNIQUE
-);
-
-drop table if exists postgres.public.cat cascade;

@@ -1,8 +1,6 @@
 package util;
 
 import models.ModelCat;
-import models.ModelCatColor;
-import models.ModelCatType;
 import models.ModelOwner;
 
 import org.hibernate.SessionFactory;
@@ -22,8 +20,6 @@ public class HibernateSessionFactory {
                 
                 configuration.addAnnotatedClass(ModelCat.class);
                 configuration.addAnnotatedClass(ModelOwner.class);
-                configuration.addAnnotatedClass(ModelCatType.class);
-                configuration.addAnnotatedClass(ModelCatColor.class);
                 
                 ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties()).build();

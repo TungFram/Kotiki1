@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 
+import enums.CatColor;
+import enums.CatType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +24,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "Cat")
-public class ModelCat { //сделать дефолтный конструктор
+public class ModelCat {
     
     @Id
     @SequenceGenerator(name = "pet_seq_gen", sequenceName = "pet_sequence", initialValue = 1, allocationSize = 1)
@@ -37,14 +39,13 @@ public class ModelCat { //сделать дефолтный конструкто
     @Column(name = "Date_birth")
     @Builder.Default LocalDate dateOfBirth = LocalDate.now();
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "Id_of_type", unique = true, nullable = false)
-    ModelCatType type;
+    @Column(name = "Type", length = 32)
+    @Enumerated(EnumType.STRING)
+    CatType type;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "Cat_color",
-            inverseJoinColumns = @JoinColumn(name = "Id_of_color", referencedColumnName = "ColorID"))
-    ModelCatColor color;
+    @Column(name = "Color", length = 32)
+    @Enumerated(EnumType.STRING)
+    CatColor color;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -53,8 +54,6 @@ public class ModelCat { //сделать дефолтный конструкто
             joinColumns = @JoinColumn(name = "Id_of_cat", referencedColumnName = "CatID"),
             inverseJoinColumns = @JoinColumn(name = "Id_of_owner", referencedColumnName = "OwnerID"))
     ModelOwner owner;
-    
-    
     
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

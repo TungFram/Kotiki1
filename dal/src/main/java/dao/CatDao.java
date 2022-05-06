@@ -48,9 +48,11 @@ public class CatDao implements ICatDao<ModelCat, Integer> {
     @Override
     public ModelCat findById(Integer id) {
         Session session = this.getSession();
-        
+        Transaction transaction = this.getTransaction(session);
+
         ModelCat model = session.get(ModelCat.class, id);
-        
+
+        transaction.commit();
         session.close();
         return model;
     }
