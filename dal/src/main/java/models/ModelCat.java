@@ -1,6 +1,7 @@
 package models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -49,7 +50,7 @@ public class ModelCat {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(name = "Affiliation",
             joinColumns = @JoinColumn(name = "Id_of_cat", referencedColumnName = "CatID"),
             inverseJoinColumns = @JoinColumn(name = "Id_of_owner", referencedColumnName = "OwnerID"))
@@ -61,5 +62,5 @@ public class ModelCat {
     @JoinTable(name = "Friendship",
             joinColumns = @JoinColumn(name = "id_of_first_cat", referencedColumnName = "CatID"),
             inverseJoinColumns = @JoinColumn(name = "id_of_second_cat", referencedColumnName = "CatID"))
-    @Singular List<ModelCat> fiends;
+    @Singular List<ModelCat> friends;
 }

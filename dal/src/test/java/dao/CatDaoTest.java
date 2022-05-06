@@ -5,6 +5,7 @@ import enums.CatType;
 import models.ModelCat;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
@@ -22,8 +23,8 @@ class CatDaoTest {
     
     private static CatDao catDao;
     
-    @BeforeAll
-    static void setUp() {        
+    @BeforeEach
+    void setUp() {        
         biba = ModelCat.createBuilder()
                 .withName("Bibonskiy")
                 .withDateOfBirth(LocalDate.now())
@@ -58,7 +59,7 @@ class CatDaoTest {
         catDao.deleteAll();
 
         ModelCat clone = biba.toBuilder().build();
-        catDao.persist(clone);
+        catDao.update(clone);
         
         ModelCat bibaBefore = catDao.persist(biba);
         biba = bibaBefore.toBuilder().withName("Ben, ohoho, no").withType(CatType.BEN).withColor(CatColor.EBONY).build();

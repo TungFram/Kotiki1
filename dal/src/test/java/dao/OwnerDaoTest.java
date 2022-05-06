@@ -7,6 +7,7 @@ import models.ModelOwner;
 import models.ModelOwner;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
@@ -19,10 +20,10 @@ class OwnerDaoTest {
 
     private static ModelOwner mafioznik;
     private static ModelOwner limarchik;
-    private OwnerDao ownerDao = new OwnerDao();
+    private static OwnerDao ownerDao;
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUp() {
         mafioznik = ModelOwner.createBuilder()
                 .withSurname("Zubenko")
                 .withName("Mihail Petrovich")
@@ -36,6 +37,8 @@ class OwnerDaoTest {
                 .withDateOfBirth(LocalDate.now())
                 .withMail("NeIdemNaPary@mail.ru")
                 .build();
+        
+        ownerDao = new OwnerDao();
     }
 
 

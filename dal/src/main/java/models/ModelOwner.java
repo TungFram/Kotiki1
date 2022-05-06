@@ -38,12 +38,14 @@ public class ModelOwner {
     @Column(name = "Date_birth")
     LocalDate dateOfBirth;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @Column(name = "Mail", length = 64)
     String mail;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "owner", orphanRemoval = true, fetch = FetchType.LAZY)
     @Singular
     List<ModelCat> cats;
 
