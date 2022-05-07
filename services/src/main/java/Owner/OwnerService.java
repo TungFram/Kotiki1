@@ -2,16 +2,16 @@
 
 import dao.CatDao;
 import dao.OwnerDao;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import models.ModelCat;
 import models.ModelOwner;
 
 import java.util.List;
 
-@NoArgsConstructor
+@AllArgsConstructor
 public class OwnerService {
     
-    private final OwnerDao ownerDao = new OwnerDao();
+    private final OwnerDao ownerDao;
 
     public ModelOwner createOwner(ModelOwner entity) {
         if (entity == null)

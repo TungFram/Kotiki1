@@ -1,14 +1,16 @@
 ﻿package Cat;
 
 import dao.CatDao;
+import lombok.AllArgsConstructor;
 import models.ModelCat;
 import models.ModelOwner;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class CatService {
     
-    private final CatDao catDao = new CatDao();
+    private final CatDao catDao;
     
     public ModelCat createCat(ModelCat cat) throws Exception {
         if (cat == null)
@@ -58,6 +60,9 @@ public class CatService {
     }
 
     public void friendCats(int idOfFirstCat, int idOfSecondCat) throws Exception {
+        if (idOfFirstCat == idOfSecondCat)
+            return;
+        
         ModelCat firstCat = findCatById(idOfFirstCat);
         ModelCat secondCat = findCatById(idOfSecondCat);
         if (firstCat == null || secondCat == null)
@@ -85,6 +90,9 @@ public class CatService {
     }
 
     public void unfriendCats(int idOfFirstCat, int idOfSecondCat) throws Exception {
+        if (idOfFirstCat == idOfSecondCat)
+            return;
+        
         ModelCat firstCat = findCatById(idOfFirstCat);
         ModelCat secondCat = findCatById(idOfSecondCat);
         if (firstCat == null || secondCat == null)

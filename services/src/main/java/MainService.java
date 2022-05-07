@@ -2,6 +2,7 @@
 import Owner.OwnerService;
 import enums.CatColor;
 import enums.CatType;
+import lombok.AllArgsConstructor;
 import models.ModelCat;
 import models.ModelOwner;
 
@@ -9,10 +10,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
 public class MainService {
     
-    OwnerService ownerService = new OwnerService();
-    CatService catService = new CatService();
+    OwnerService ownerService;
+    CatService catService;
     
     public ModelCat registerCat(
             String name,
@@ -25,6 +27,8 @@ public class MainService {
         ModelOwner owner = ownerService.findOwnerById(idOfOwner);
         if (owner == null)
             throw new Exception("Can't register cat because his owner doesn't registered.");
+        if (friends == null)
+            friends = new ArrayList<>();
         
         ModelCat cat = ModelCat.createBuilder()
                 .withName(name)
