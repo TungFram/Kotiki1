@@ -2,12 +2,20 @@
 
 import dao.CatDao;
 import models.ModelCat;
+import models.ModelOwner;
 
 import java.util.List;
 
 public class CatService {
     
     private final CatDao catDao = new CatDao();
+    
+    public ModelCat createCat(ModelCat cat) throws Exception {
+        if (cat == null)
+            throw new Exception("Invalid cat.");
+        
+        return catDao.persist(cat);
+    }
     
     public ModelCat findCatById(int id) {
         return catDao.findById(id);
@@ -17,7 +25,7 @@ public class CatService {
         return catDao.findAll();
     }
     
-    public void deleteCatById(int id) {
+    public void deleteById(int id) {
         ModelCat cat = catDao.findById(id);
         if (cat == null)
             return;
@@ -25,14 +33,27 @@ public class CatService {
         catDao.delete(cat);
     }
     
-    public void deleteAllCats() {
+    public void deleteAll() {
         catDao.deleteAll();
     }
     
-    public ModelCat updateCat(ModelCat cat) {
+    
+    
+    public ModelCat changeOwnerOfCat(int idOfCat, ModelOwner newOwner) throws Exception {
+        ModelCat cat = findCatById(idOfCat);
         if (cat == null)
-            return null;
+            throw new Exception("Can't find cat");
         
+        cat = cat.toBuilder().withOwner(newOwner).build();
+        return catDao.update(cat);
+    }
+    
+    public ModelCat changeNameOfCat(int idOfCat, String name) throws Exception {
+        ModelCat cat = findCatById(idOfCat);
+        if (cat == null)
+            throw new Exception("Can't find cat");
+        
+        cat = cat.toBuilder().withName(name).build();
         return catDao.update(cat);
     }
 
@@ -51,6 +72,7 @@ public class CatService {
                 foundedFirstCat != null && foundedSecondCat == null) {
             throw new Exception("Friendship isn't bidirectional");
         }
+        
         if (foundedFirstCat != null && foundedSecondCat != null) {
             return;
         }
@@ -60,5 +82,45 @@ public class CatService {
         
         catDao.update(firstCat);
         catDao.update(secondCat);
+    }
+
+    public void unfriendCats(int idOfFirstCat, int idOfSecondCat) throws Exception {
+        ModelCat firstCat = findCatById(idOfFirstCat);
+        ModelCat secondCat = findCatById(idOfSecondCat);
+        if (firstCat == null || secondCat == null)
+            return;
+
+        List<ModelCat> friendsOfFirstCat = getFriendsOfCat(idOfFirstCat);
+        List<ModelCat> friendsOfSecondCat = getFriendsOfCat(idOfSecondCat);
+        
+        ModelCat foundedFirstCat = friendsOfSecondCat.stream()
+                .filter(cat -> cat.getId() == idOfFirstCat).findFirst().orElse(null);
+        ModelCat foundedSecondCat = friendsOfFirstCat.stream()
+                .filter(cat -> cat.getId() == idOfSecondCat).findFirst().orElse(null);
+
+        if (foundedFirstCat == null && foundedSecondCat != null ||
+                foundedFirstCat != null && foundedSecondCat == null) {
+            throw new Exception("Friendship isn't bidirectional");
+        }
+        
+        if (foundedFirstCat == null && foundedSecondCat == null) {
+            return;
+        }
+
+        friendsOfFirstCat.remove(secondCat);
+        friendsOfSecondCat.remove(firstCat);
+        firstCat = firstCat.toBuilder().clearFriends().withFriends(friendsOfFirstCat).build();
+        secondCat = secondCat.toBuilder().clearFriends().withFriends(friendsOfSecondCat).build();
+
+        catDao.update(firstCat);
+        catDao.update(secondCat);
+    }
+    
+    public List<ModelCat> getFriendsOfCat(int idOfCat) throws Exception {
+        ModelCat cat = findCatById(idOfCat);
+        if (cat == null)
+            throw new Exception("Invalid cat");
+
+        return cat.getFriends();
     }
 }

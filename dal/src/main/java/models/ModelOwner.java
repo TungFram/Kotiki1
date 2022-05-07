@@ -38,7 +38,6 @@ public class ModelOwner {
     @Column(name = "Date_birth")
     LocalDate dateOfBirth;
 
-    @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Column(name = "Mail", length = 64)
     String mail;

@@ -38,7 +38,7 @@ public class ModelCat {
     String name;
     
     @Column(name = "Date_birth")
-    @Builder.Default LocalDate dateOfBirth = LocalDate.now();
+    LocalDate dateOfBirth;
 
     @Column(name = "Type", length = 32)
     @Enumerated(EnumType.STRING)

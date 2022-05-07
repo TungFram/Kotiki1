@@ -12,15 +12,14 @@ import java.util.List;
 public class OwnerService {
     
     private final OwnerDao ownerDao = new OwnerDao();
-    private final CatDao catDao = new CatDao();
 
-    public ModelOwner create(ModelOwner entity) {
+    public ModelOwner createOwner(ModelOwner entity) {
         if (entity == null)
             return null;
         return ownerDao.persist(entity);
     }
 
-    public ModelOwner findById(int id) {
+    public ModelOwner findOwnerById(int id) {
         return ownerDao.findById(id);
     }
     
@@ -39,15 +38,49 @@ public class OwnerService {
         ownerDao.deleteAll();
     }
     
-    public void addCat(int idOfOwner, ModelCat cat) throws Exception {
+    public ModelOwner changeMail(int idOfOwner, String mail) throws Exception {
+        ModelOwner owner = findOwnerById(idOfOwner);
+        if (owner == null)
+            throw new Exception("Can't find owner.");
+        
+        owner = owner.toBuilder().withMail(mail).build();
+        return ownerDao.update(owner);
+    }
+    
+    public void addCat(ModelOwner owner, ModelCat cat) throws Exception {
         if (cat == null)
             throw new Exception("Invalid cat");
-        
-        ModelOwner owner = ownerDao.findById(idOfOwner);
         if(owner == null)
-            return;
+            throw new Exception("Invalid owner");
         
         owner = owner.toBuilder().withCat(cat).build();
         ownerDao.update(owner);
+    }
+    
+    public void deleteCat(int idOfOwner, ModelCat cat) throws Exception {
+        if(cat == null)
+            return;
+        
+        ModelOwner owner = ownerDao.findById(idOfOwner);
+        if (owner == null)
+            throw new Exception("Can't find owner");
+
+        List<ModelCat> cats = findCatsOfOwner(idOfOwner);
+        ModelCat foundedCat = cats.stream().filter(someCat -> someCat.getId() == cat.getId())
+                .findFirst().orElse(null);
+        if (foundedCat == null)
+            throw new Exception("Can't find owner's cat");
+        cats.remove(foundedCat);
+        
+        owner = owner.toBuilder().clearCats().withCats(cats).build();
+        ownerDao.update(owner);
+    }
+    
+    public List<ModelCat> findCatsOfOwner(int idOfOwner) throws Exception {
+        ModelOwner owner = findOwnerById(idOfOwner);
+        if (owner == null)
+            throw new Exception("Can't find owner");
+        
+        return owner.getCats();
     }
 }
