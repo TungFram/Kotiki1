@@ -1,4 +1,4 @@
-﻿import Cat.CatService;
+import Cat.CatService;
 import Owner.OwnerService;
 import enums.CatColor;
 import enums.CatType;
@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MainService {
     
-    OwnerService ownerService;
-    CatService catService;
+    private OwnerService ownerService;
+    private CatService catService;
     
     public ModelCat registerCat(
             String name,
@@ -38,8 +38,8 @@ public class MainService {
                 .withOwner(owner) //<--
                 .withFriends(friends)
                 .build();
-        
-        ownerService.addCat(owner, cat);
+
+        ModelOwner updatedOwner = ownerService.addCat(owner, cat);
         
         return catService.createCat(cat);
     }
@@ -49,7 +49,9 @@ public class MainService {
             String surname,
             String mail,
             LocalDate dateBirth,
-            List<ModelCat> cats) {
+            List<ModelCat> cats) throws Exception {
+        if (cats == null)
+            cats = new ArrayList<>();
         
         ModelOwner owner = ModelOwner.createBuilder()
                 .withName(name)

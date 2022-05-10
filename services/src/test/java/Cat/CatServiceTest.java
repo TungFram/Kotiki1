@@ -1,4 +1,4 @@
-﻿package Cat;
+package Cat;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

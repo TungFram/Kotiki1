@@ -44,7 +44,7 @@ public class ModelOwner {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "owner", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "owner", orphanRemoval = true, fetch = FetchType.EAGER)
     @Singular
     List<ModelCat> cats;
 

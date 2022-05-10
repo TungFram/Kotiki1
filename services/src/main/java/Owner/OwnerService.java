@@ -1,4 +1,4 @@
-﻿package Owner;
+package Owner;
 
 import dao.CatDao;
 import dao.OwnerDao;
@@ -13,9 +13,9 @@ public class OwnerService {
     
     private final OwnerDao ownerDao;
 
-    public ModelOwner createOwner(ModelOwner entity) {
+    public ModelOwner createOwner(ModelOwner entity) throws Exception {
         if (entity == null)
-            return null;
+            throw new Exception("Entity was null");
         return ownerDao.persist(entity);
     }
 
@@ -47,14 +47,15 @@ public class OwnerService {
         return ownerDao.update(owner);
     }
     
-    public void addCat(ModelOwner owner, ModelCat cat) throws Exception {
+    public ModelOwner addCat(ModelOwner owner, ModelCat cat) throws Exception {
         if (cat == null)
             throw new Exception("Invalid cat");
         if(owner == null)
             throw new Exception("Invalid owner");
         
         owner = owner.toBuilder().withCat(cat).build();
-        ownerDao.update(owner);
+        ModelOwner updatedOwner = ownerDao.update(owner);
+        return updatedOwner;
     }
     
     public void deleteCat(int idOfOwner, ModelCat cat) throws Exception {
