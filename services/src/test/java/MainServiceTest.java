@@ -243,8 +243,51 @@ class MainServiceTest {
     }
 
     @Test
-    void friendCats() {
+    void friendCats() throws Exception {
     }
+    
+//    @Test //Тест на рельной бд, все работает!!!)
+//    void friendCats() throws Exception {
+//        MainService service = new MainService(
+//                new OwnerService(new OwnerDao()),
+//                new CatService(new CatDao())
+//        );
+//        
+//        service.deleteAllOwners();
+//        service.deleteAllCats();
+//        
+//        ModelOwner registeredGiga = service.registerOwner(
+//                gigaChad.getName(),
+//                gigaChad.getSurname(),
+//                gigaChad.getMail(),
+//                gigaChad.getDateOfBirth(),
+//                gigaChad.getCats()
+//        );
+//        ModelOwner registeredMilos = service.registerOwner(
+//                sweetMan.getName(),
+//                sweetMan.getSurname(),
+//                sweetMan.getMail(),
+//                sweetMan.getDateOfBirth(),
+//                sweetMan.getCats()
+//        );
+//        
+//        ModelCat registeredLelik = service.registerCat(
+//                lelik.getName(),
+//                lelik.getDateOfBirth(),
+//                lelik.getType(),
+//                lelik.getColor(),
+//                registeredGiga.getId(),
+//                lelik.getFriends());
+//        ModelCat registeredBolik = service.registerCat(
+//                bolik.getName(),
+//                bolik.getDateOfBirth(),
+//                bolik.getType(),
+//                bolik.getColor(),
+//                registeredMilos.getId(),
+//                bolik.getFriends());
+//        
+//        service.friend2Cats(registeredLelik.getId(), registeredBolik.getId());
+//    }
 
     @Test
     void unfriendCats() {
